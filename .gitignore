@@ -1,0 +1,9 @@
+node_modules/
+.expo/
+dist/
+web-build/
+*.log
+.DS_Store
+
+# python bytecode from the icon generator
+__pycache__/

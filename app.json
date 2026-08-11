@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "FretMate",
+    "slug": "fretmate",
+    "scheme": "fretmate",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0B0C0E",
+    "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "assetBundlePatterns": ["assets/**/*"],
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "backgroundColor": "#0B0C0E",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fretmate.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "FretMate uses the microphone for the chromatic tuner."
+      }
+    },
+    "android": {
+      "package": "com.fretmate.app",
+      "versionCode": 1,
+      "permissions": ["RECORD_AUDIO"],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0B0C0E"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": ["expo-router", "expo-audio"]
+  }
+}
