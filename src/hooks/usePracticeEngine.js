@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as Haptics from 'expo-haptics';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { usePractice, beatIntervalMs } from '../store/usePractice';
 import {
   initClickPlayers,
@@ -8,6 +9,14 @@ import {
   setPlaybackAudioMode,
   fireClick,
 } from '../lib/metronomeAudio';
+
+const KEEP_AWAKE_TAG = 'fretmate-practice';
+
+// deactivateKeepAwake is sync on some expo-keep-awake versions and a promise on
+// others; swallow either outcome rather than branching on the version.
+function settle(result) {
+  if (result && typeof result.catch === 'function') result.catch(() => {});
+}
 
 // Runs the metronome scheduler and practice timer. Mounted once at the app root so both keep running across tabs.
 export default function usePracticeEngine() {
@@ -75,6 +84,27 @@ export default function usePracticeEngine() {
     return () => {
       if (intervalId) clearInterval(intervalId);
       unsub();
+    };
+  }, []);
+
+  // Hold the screen on while either is running. Android suspends JS timers when
+  // the display sleeps, which silently stops the beat mid-practice.
+  useEffect(() => {
+    let held = false;
+
+    const apply = (shouldHold) => {
+      if (shouldHold === held) return;
+      held = shouldHold;
+      settle(shouldHold ? activateKeepAwakeAsync(KEEP_AWAKE_TAG) : deactivateKeepAwake(KEEP_AWAKE_TAG));
+    };
+
+    const needed = (s) => s.isPlaying || s.timerRunning;
+    apply(needed(usePractice.getState()));
+    const unsub = usePractice.subscribe((state) => apply(needed(state)));
+
+    return () => {
+      unsub();
+      if (held) settle(deactivateKeepAwake(KEEP_AWAKE_TAG));
     };
   }, []);
 

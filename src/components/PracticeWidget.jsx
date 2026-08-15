@@ -2,15 +2,21 @@ import { useMemo } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePractice, formatTimer } from '../store/usePractice';
 import { radius, spacing, font } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
+
+// Clears the 66pt tab bar with a small gap; the bar grows by the bottom inset
+// under edge-to-edge, so this has to ride up by the same amount.
+const TAB_BAR_CLEARANCE = 78;
 
 export default function PracticeWidget() {
   const c = useTheme();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const pathname = usePathname();
+  const insets = useSafeAreaInsets();
 
   const bpm = usePractice((s) => s.bpm);
   const isPlaying = usePractice((s) => s.isPlaying);
@@ -29,7 +35,10 @@ export default function PracticeWidget() {
   if (!anyActive) return null;
 
   return (
-    <Pressable style={styles.wrap} onPress={() => router.push('/metronome')}>
+    <Pressable
+      style={[styles.wrap, { bottom: TAB_BAR_CLEARANCE + insets.bottom }]}
+      onPress={() => router.push('/metronome')}
+    >
       {/* Metronome side */}
       <View style={styles.section}>
         <Pressable
@@ -81,7 +90,6 @@ const makeStyles = (c) => StyleSheet.create({
     position: 'absolute',
     left: spacing.lg,
     right: spacing.lg,
-    bottom: 78,
     backgroundColor: c.card,
     borderRadius: radius.pill,
     borderWidth: 1,
