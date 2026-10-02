@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FretMate — guitar chords, scales and metronome</title>
+  <meta name="description" content="Guitar chord shapes, scale positions and a metronome, derived from music theory rather than lookup tables.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#chords">
+      <span class="brand-mark">FM</span>
+      <span class="brand-name">FretMate</span>
+    </a>
+    <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+  </header>
+
+  <main class="view" id="view"></main>
+
+  <!--
+    Plain classic scripts, loaded in dependency order. No bundler, no modules,
+    no build step: each file attaches to the single window.FM namespace and the
+    browser executes them top to bottom before the app boots.
+  -->
+  <script src="js/notes.js"></script>
+  <script src="js/chord-engine.js"></script>
+  <script src="js/scale-engine.js"></script>
+  <script src="js/harmony.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/fretboard.js"></script>
+  <script src="js/chord-diagram.js"></script>
+  <script src="js/tab-chords.js"></script>
+  <script src="js/tab-scales.js"></script>
+  <script src="js/tab-metronome.js"></script>
+  <script src="js/tab-settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
